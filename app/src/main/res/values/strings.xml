@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MediaSession-Example</string>
+    <string name="notification_title">Player Sample</string>
+    <string name="notification_text">Press PLAY!</string>
 </resources>
