@@ -15,13 +15,14 @@ import vlntdds.com.mediasession.sample.helpers.NotificationHelper
 class PlayerActivity : AppCompatActivity(), ExoPlayer.EventListener {
 
     private lateinit var mMediaSession: MediaSessionCompat
-    private lateinit var mPlaybackState: PlaybackStateCompat.Builder
     private lateinit var mExoPlayer: SimpleExoPlayer
+    private var mPlaybackState: PlaybackStateCompat.Builder = PlaybackStateCompat.Builder()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
         NotificationHelper.setupNotificationChannel(this)
+        setupPlayer()
     }
 
     override fun onDestroy() {
@@ -33,18 +34,25 @@ class PlayerActivity : AppCompatActivity(), ExoPlayer.EventListener {
         }
     }
 
+    private fun setupPlayer() {
+        if (!::mExoPlayer.isInitialized) {
+
+        }
+    }
+
     private fun initializeMediaSession() {
         mMediaSession = MediaSessionCompat(this, Constants.MEDIA_SESSION_TAG)
         mMediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
         mMediaSession.setMediaButtonReceiver(null)
 
-        mPlaybackState = PlaybackStateCompat.Builder().setActions(
+        mPlaybackState.setActions(
             PlaybackStateCompat.ACTION_PLAY or
                     PlaybackStateCompat.ACTION_PAUSE or
                     PlaybackStateCompat.ACTION_PLAY_PAUSE or
                     PlaybackStateCompat.ACTION_FAST_FORWARD or
                     PlaybackStateCompat.ACTION_REWIND or
-                    PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                    PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+                    PlaybackStateCompat.ACTION_SKIP_TO_NEXT
         )
 
         mMediaSession.setPlaybackState(mPlaybackState.build())

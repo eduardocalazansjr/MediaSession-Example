@@ -60,6 +60,11 @@ class NotificationHelper {
                 MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
             )
 
+            val nextAction = NotificationCompat.Action(
+                R.drawable.exo_controls_next, context.getString(R.string.exo_controls_next_description),
+                MediaButtonReceiver.buildMediaButtonPendingIntent(context, PlaybackStateCompat.ACTION_SKIP_TO_NEXT)
+            )
+
             val contentPendingIntent = PendingIntent.getActivity(context, 0, Intent(context, PlayerActivity::class.java), 0)
 
             val notificationStyle = androidx.media.app.NotificationCompat.MediaStyle()
@@ -74,6 +79,7 @@ class NotificationHelper {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .addAction(restartAction)
                 .addAction(playPauseAction)
+                .addAction(nextAction)
                 .setStyle(notificationStyle)
 
             val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
