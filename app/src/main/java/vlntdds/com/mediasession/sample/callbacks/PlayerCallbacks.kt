@@ -22,6 +22,10 @@ internal class PlayerCallbacks(var mExoPlayer: SimpleExoPlayer) : MediaSessionCo
         super.onSkipToPrevious()
         mExoPlayer.seekTo(0)
         Log.i(this.javaClass.name, "onSkipToPrevious")
+    }
 
+    override fun onSkipToNext() {
+        super.onSkipToNext()
+        Log.i(this.javaClass.name, "onSkipToNext")
     }
 }
