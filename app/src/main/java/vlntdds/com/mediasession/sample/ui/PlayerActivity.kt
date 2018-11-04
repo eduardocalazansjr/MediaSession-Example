@@ -8,12 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
+import android.widget.Toast
 import androidx.media.session.MediaButtonReceiver
 import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.metadata.id3.TextInformationFrame
-import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
@@ -70,9 +68,11 @@ class PlayerActivity : AppCompatActivity(), ExoPlayer.EventListener {
             mExoPlayer!!.playWhenReady = true
 
             mExoPlayer!!.setMetadataOutput {
-                Log.d(this.javaClass.name, (it.get(0) as TextInformationFrame).value)
-                Log.d(this.javaClass.name, (it.get(2) as TextInformationFrame).value)
-                it.describeContents()
+                NotificationHelper.showPlaybackNotification(mPlaybackState!!.build(),
+                    this,
+                    mMediaSession,
+                    (it.get(0) as TextInformationFrame).value,
+                    (it.get(2) as TextInformationFrame).value)
             }
         }
     }
@@ -109,7 +109,7 @@ class PlayerActivity : AppCompatActivity(), ExoPlayer.EventListener {
             )
         }
         PlayerActivity.mMediaSession.setPlaybackState(mPlaybackState!!.build())
-        NotificationHelper.showPlaybackNotification(mPlaybackState!!.build(), this, mMediaSession)
+        NotificationHelper.showPlaybackNotification(mPlaybackState!!.build(), this, mMediaSession, null, null)
     }
 
     override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) {

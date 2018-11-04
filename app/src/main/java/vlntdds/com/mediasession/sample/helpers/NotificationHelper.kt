@@ -35,7 +35,11 @@ class NotificationHelper {
         }
 
         @JvmStatic
-        fun showPlaybackNotification(playbackState: PlaybackStateCompat, context: Context, mediaSessionCompat: MediaSessionCompat) {
+        fun showPlaybackNotification(playbackState: PlaybackStateCompat,
+                                     context: Context,
+                                     mediaSessionCompat: MediaSessionCompat,
+                                     artist: String?,
+                                     trackName: String?) {
             val icon: Int
             val playPause: String
 
@@ -72,8 +76,8 @@ class NotificationHelper {
                 .setShowActionsInCompactView(0, 1)
 
             val notification = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID)
-                .setContentTitle(context.getString(R.string.notification_title))
-                .setContentText(context.getString(R.string.notification_text))
+                .setContentTitle(artist?: context.getString(R.string.notification_title))
+                .setContentText(trackName?: context.getString(R.string.notification_text))
                 .setContentIntent(contentPendingIntent)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
