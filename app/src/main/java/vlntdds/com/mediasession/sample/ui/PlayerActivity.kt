@@ -12,10 +12,13 @@ import android.util.Log
 import androidx.media.session.MediaButtonReceiver
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
+import com.google.android.exoplayer2.metadata.id3.TextInformationFrame
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.source.TrackGroupArray
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import kotlinx.android.synthetic.main.activity_player.*
@@ -58,16 +61,19 @@ class PlayerActivity : AppCompatActivity(), ExoPlayer.EventListener {
             player_view.player = mExoPlayer
             mExoPlayer!!.addListener(this)
             val userAgent = Util.getUserAgent(this, "AndroidAPP")
-            val mediaSource = ExtractorMediaSource(
-                Uri.parse("https://freemusicarchive.org/file/music/Boston_Hassle/Mules/7/Mules_-_01_-_Shock_ya.mp3"),
-                DefaultDataSourceFactory(this, userAgent),
-                DefaultExtractorsFactory(),
+            val mediaSource = HlsMediaSource(Uri.parse("https://d3jh86ebq5l3fm.cloudfront.net/hls/1470155219129532/master.m3u8"),
+                DefaultDataSourceFactory(this, userAgent, DefaultBandwidthMeter()),
                 null,
-                null
-            )
+                null)
             mMediaSession.setCallback(PlayerCallbacks(mExoPlayer!!))
             mExoPlayer!!.prepare(mediaSource)
             mExoPlayer!!.playWhenReady = true
+
+            mExoPlayer!!.setMetadataOutput {
+                Log.d(this.javaClass.name, (it.get(0) as TextInformationFrame).value)
+                Log.d(this.javaClass.name, (it.get(2) as TextInformationFrame).value)
+                it.describeContents()
+            }
         }
     }
 
